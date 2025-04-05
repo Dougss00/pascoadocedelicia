@@ -29,9 +29,11 @@
         }
         h1 {
             text-align: center;
-            color: #5d4037;
+            color: #760751f3;
             margin-bottom: 10px;
-            font-size: 26px;
+            font-size: 30px; /* Aumentado um pouco */
+            font-weight: bold; /* Negrito */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Sombra sutil */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -39,9 +41,9 @@
         }
         .slogan-img {
             display: block;
-            max-width: 30%;
+            max-width: 40%;
             height: auto;
-            margin: 0 auto 10px auto; /* Centraliza e adiciona espaço abaixo */
+            margin: 0 auto 20px auto; /* Centraliza e adiciona espaço abaixo */
             border-radius: 10px;
         }
         .form-group {
@@ -112,7 +114,7 @@
                 padding: 15px;
             }
             h1 {
-                font-size: 22px;
+                font-size: 24px; /* Ajustado para telas menores */
             }
             .slogan-img {
                 max-width: 90%; /* Reduz um pouco em telas pequenas */
@@ -128,7 +130,7 @@
 </head>
 <body>
     <div class="container">
-        <h2>🧡 Feliz Páscoa 2025 🐰</h2>
+        <h1>🧡 Feliz Páscoa 2025 🐰</h1>
         <img src="novo-slogan.png" alt="Slogan Doce Delícia" class="slogan-img">
         
         <form id="pedidoForm" onsubmit="enviarWhatsApp(event)">
@@ -163,7 +165,6 @@
                 <label for="sabor2">Sabor 2 (Opcional)</label>
                 <select id="sabor2" name="sabor2">
                     <option value="" selected>Selecionar</option>
-                    <option value="Nenhum">Nenhum</option>
                     <option value="Brigadeiro">Brigadeiro</option>
                     <option value="Prestígio">Prestígio</option>
                     <option value="Maracujá">Maracujá</option>
@@ -204,13 +205,18 @@
             // Limpa as opções atuais
             tamanhoSelect.innerHTML = '<option value="" selected>Selecionar</option>';
 
-            // Adiciona as novas opções se houver tipo selecionado
+            // Adiciona as novas opções
             tamanhos.forEach(tamanho => {
                 const option = document.createElement('option');
                 option.value = `${tamanho.peso} - ${tamanho.preco}`;
                 option.textContent = `${tamanho.peso} - ${tamanho.preco}`;
                 tamanhoSelect.appendChild(option);
             });
+
+            // Preenche automaticamente se houver apenas uma opção
+            if (tamanhos.length === 1) {
+                tamanhoSelect.value = `${tamanhos[0].peso} - ${tamanhos[0].preco}`;
+            }
 
             // Atualiza o total após mudar os tamanhos
             atualizarTotal();
@@ -257,9 +263,9 @@
             }
 
             mensagem += `*Valor Total:* ${precoStr}\n` +
-                        `\nPor favor, confirme a disponibilidade e o preço!`;
+                        `\nPor favor, aguarde a confirmação do seu pedido e data da entrega!`;
 
-            const numeroWhatsApp = "5575998496080"; // Substitua pelo seu número
+            const numeroWhatsApp = "5511999999999"; // Substitua pelo seu número
             const mensagemCodificada = encodeURIComponent(mensagem);
             const urlWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensagemCodificada}`;
 
