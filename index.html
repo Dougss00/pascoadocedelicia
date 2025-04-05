@@ -15,20 +15,34 @@
             background: linear-gradient(135deg, #ffe6cc, #ffcccc);
             min-height: 100vh;
             padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         .container {
             max-width: 400px;
-            margin: 0 auto;
+            width: 100%;
             background: white;
             border-radius: 20px;
             padding: 25px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
         }
         h1 {
             text-align: center;
             color: #5d4037;
-            margin-bottom: 25px;
-            font-size: 24px;
+            margin-bottom: 10px;
+            font-size: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .slogan-img {
+            display: block;
+            max-width: 40%;
+            height: auto;
+            margin: 0 auto 20px auto; /* Centraliza e adiciona espaço abaixo */
+            border-radius: 10px;
         }
         .form-group {
             margin-bottom: 20px;
@@ -50,11 +64,12 @@
             background: #fff3e0;
             color: #5d4037;
             appearance: none;
+            transition: border-color 0.3s ease;
         }
         select:focus {
             outline: none;
             border-color: #ff7043;
-            box-shadow: 0 0 5px rgba(255,112,67,0.5);
+            box-shadow: 0 0 5px rgba(255, 112, 67, 0.5);
         }
         .form-group::after {
             content: '▼';
@@ -67,7 +82,7 @@
         button {
             width: 100%;
             padding: 15px;
-            background: #ff7043;
+            background: linear-gradient(135deg, #25D366, #20B858); /* Verde do WhatsApp */
             border: none;
             border-radius: 10px;
             color: white;
@@ -75,53 +90,71 @@
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 3px 10px rgba(255,112,67,0.3);
+            box-shadow: 0 3px 10px rgba(37, 211, 102, 0.3);
         }
         button:hover {
-            background: #f4511e;
+            background: linear-gradient(135deg, #20B858, #1A9C47); /* Verde mais escuro */
             transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.5);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        .total {
+            text-align: center;
+            color: #5d4037;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            h1 {
+                font-size: 22px;
+            }
+            .slogan-img {
+                max-width: 90%; /* Reduz um pouco em telas pequenas */
+            }
+            select, button {
+                font-size: 14px;
+            }
+            .total {
+                font-size: 16px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🧡 Ovos de Páscoa Doce Delícia 🐰</h1>
+        <h1>🧡 Feliz Páscoa 2025 🐰</h1>
+        <img src="novo-slogan.png" alt="Slogan Doce Delícia" class="slogan-img">
         
         <form id="pedidoForm" onsubmit="enviarWhatsApp(event)">
             <div class="form-group">
                 <label for="tipo-ovo">Tipo de Ovo</label>
-                <select id="tipo-ovo" name="tipo-ovo">
-                    <option value="Ovo Tradicional">Ovo Tradicional</option>
-                    <option value="Ovo Trufado">Ovo Trufado</option>
+                <select id="tipo-ovo" name="tipo-ovo" onchange="atualizarTamanhos()">
+                    <option value="" selected>Selecionar</option>
                     <option value="Ovo de Colher">Ovo de Colher</option>
-                    <option value="Ovo Recheado">Ovo Recheado</option>
-                    <option value="Ovo Diet">Ovo Diet</option>
-                    <option value="Ovo Infantil">Ovo Infantil</option>
-                    <option value="Ovo Premium">Ovo Premium</option>
-                    <option value="Ovo Personalizado">Ovo Personalizado</option>
+                    <option value="Ovo Kids">Ovo Kids</option>
+                    <option value="Ovo Trufado">Ovo Trufado</option>
+                    <option value="Ovo Tradicional">Ovo Tradicional</option>
                 </select>
             </div>
 
             <div class="form-group">
                 <label for="tamanho">Tamanho</label>
-                <select id="tamanho" name="tamanho">
-                    <option value="100g">100g</option>
-                    <option value="250g">250g</option>
-                    <option value="350g">350g</option>
-                    <option value="500g">500g</option>
-                    <option value="750g">750g</option>
-                    <option value="1kg">1kg</option>
-                    <option value="1.5kg">1.5kg</option>
-                    <option value="2kg">2kg</option>
-                </select>
+                <select id="tamanho" name="tamanho" onchange="atualizarTotal()"></select>
             </div>
 
             <div class="form-group">
                 <label for="sabor1">Sabor 1 (Obrigatório)</label>
                 <select id="sabor1" name="sabor1" required>
+                    <option value="" selected>Selecionar</option>
                     <option value="Brigadeiro">Brigadeiro</option>
                     <option value="Prestígio">Prestígio</option>
-                    <option value="Prestígio">Maracujá</option>
+                    <option value="Maracujá">Maracujá</option>
                     <option value="Ninho">Ninho</option>
                 </select>
             </div>
@@ -129,52 +162,116 @@
             <div class="form-group">
                 <label for="sabor2">Sabor 2 (Opcional)</label>
                 <select id="sabor2" name="sabor2">
-                    <option value="Nenhum" selected>Nenhum</option>
-                   <option value="Brigadeiro">Brigadeiro</option>
+                    <option value="" selected>Selecionar</option>
+                    <option value="Nenhum">Nenhum</option>
+                    <option value="Brigadeiro">Brigadeiro</option>
                     <option value="Prestígio">Prestígio</option>
-                    <option value="Prestígio">Maracujá</option>
+                    <option value="Maracujá">Maracujá</option>
                     <option value="Ninho">Ninho</option>
                 </select>
             </div>
 
             <button type="submit">Enviar Pedido via WhatsApp</button>
         </form>
+        <p class="total" id="valorTotal">Valor Total: R$ 0,00</p>
     </div>
 
     <script>
-        function enviarWhatsApp(event) {
-            event.preventDefault(); // Evita o envio padrão do formulário
+        // Dados dos tamanhos disponíveis por tipo de ovo
+        const tamanhosPorTipo = {
+            "Ovo de Colher": [
+                { peso: "150g", preco: "R$ 45,00" },
+                { peso: "350g", preco: "R$ 60,00" }
+            ],
+            "Ovo Kids": [
+                { peso: "150g", preco: "R$ 48,00" }
+            ],
+            "Ovo Trufado": [
+                { peso: "250g", preco: "R$ 35,00" }
+            ],
+            "Ovo Tradicional": [
+                { peso: "50g", preco: "R$ 7,00" },
+                { peso: "150g", preco: "R$ 20,00" }
+            ]
+        };
 
-            // Captura os valores selecionados
+        // Função para atualizar os tamanhos disponíveis
+        function atualizarTamanhos() {
+            const tipoOvo = document.getElementById('tipo-ovo').value;
+            const tamanhoSelect = document.getElementById('tamanho');
+            const tamanhos = tamanhosPorTipo[tipoOvo] || [];
+
+            // Limpa as opções atuais
+            tamanhoSelect.innerHTML = '<option value="" selected>Selecionar</option>';
+
+            // Adiciona as novas opções se houver tipo selecionado
+            tamanhos.forEach(tamanho => {
+                const option = document.createElement('option');
+                option.value = `${tamanho.peso} - ${tamanho.preco}`;
+                option.textContent = `${tamanho.peso} - ${tamanho.preco}`;
+                tamanhoSelect.appendChild(option);
+            });
+
+            // Atualiza o total após mudar os tamanhos
+            atualizarTotal();
+        }
+
+        // Função para calcular e exibir o valor total
+        function atualizarTotal() {
+            const tamanho = document.getElementById('tamanho').value;
+            const valorTotalElement = document.getElementById('valorTotal');
+            let precoStr = "R$ 0,00";
+
+            if (tamanho) {
+                precoStr = tamanho.split(' - ')[1] || "R$ 0,00"; // Pega o preço ou mantém 0
+            }
+
+            valorTotalElement.textContent = `Valor Total: ${precoStr}`;
+        }
+
+        // Inicializa os tamanhos e o total ao carregar a página
+        atualizarTamanhos();
+
+        function enviarWhatsApp(event) {
+            event.preventDefault();
+
             const tipoOvo = document.getElementById('tipo-ovo').value;
             const tamanho = document.getElementById('tamanho').value;
             const sabor1 = document.getElementById('sabor1').value;
             const sabor2 = document.getElementById('sabor2').value;
+            const precoStr = tamanho ? tamanho.split(' - ')[1] : "Não informado";
 
-            // Monta a mensagem do pedido
+            // Verifica se todos os campos obrigatórios estão preenchidos
+            if (!tipoOvo || !tamanho || !sabor1) {
+                alert("Por favor, preencha todos os campos obrigatórios!");
+                return;
+            }
+
             let mensagem = `Olá! Gostaria de fazer um pedido:\n\n` +
                            `*Tipo de Ovo:* ${tipoOvo}\n` +
                            `*Tamanho:* ${tamanho}\n` +
                            `*Sabor 1:* ${sabor1}\n`;
 
-            // Adiciona o segundo sabor apenas se não for "Nenhum"
-            if (sabor2 !== "Nenhum") {
+            if (sabor2 && sabor2 !== "Nenhum") {
                 mensagem += `*Sabor 2:* ${sabor2}\n`;
             }
 
-            mensagem += `\nPor favor, confirme a disponibilidade e o preço!`;
+            mensagem += `*Valor Total:* ${precoStr}\n` +
+                        `\nPor favor, confirme a disponibilidade e o preço!`;
 
-            // Número de WhatsApp (substitua pelo seu número no formato internacional, sem "+" ou espaços)
-            const numeroWhatsApp = "5575998496080"; // Exemplo: 5511999999999 para Brasil
-
-            // Codifica a mensagem para URL
+            const numeroWhatsApp = "5511999999999"; // Substitua pelo seu número
             const mensagemCodificada = encodeURIComponent(mensagem);
-
-            // Gera o link do WhatsApp
             const urlWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensagemCodificada}`;
 
-            // Abre o WhatsApp no celular ou desktop
-            window.open(urlWhatsApp, '_blank');
+            const button = document.querySelector('button');
+            button.textContent = "Enviando...";
+            button.disabled = true;
+
+            setTimeout(() => {
+                window.open(urlWhatsApp, '_blank');
+                button.textContent = "Enviar Pedido via WhatsApp";
+                button.disabled = false;
+            }, 500);
         }
     </script>
 </body>
