@@ -112,18 +112,34 @@
         @media (max-width: 480px) {
             .container {
                 padding: 15px;
+                max-width: 95%;
             }
             h1 {
                 font-size: 24px;
+                flex-direction: column;
+                gap: 5px;
             }
             .slogan-img {
-                max-width: 90%;
+                max-width: 80%;
+                margin-bottom: 15px;
             }
             select, button {
                 font-size: 14px;
+                padding: 10px;
             }
             .total {
                 font-size: 16px;
+            }
+            .form-group {
+                margin-bottom: 15px;
+            }
+            .form-group::after {
+                top: 38px;
+                right: 12px;
+            }
+            label {
+                font-size: 14px;
+                margin-bottom: 6px;
             }
         }
     </style>
@@ -169,6 +185,16 @@
                     <option value="Prestígio">Prestígio</option>
                     <option value="Maracujá">Maracujá</option>
                     <option value="Ninho">Ninho</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="data-entrega">Data de Entrega (Opcional)</label>
+                <select id="data-entrega" name="data-entrega">
+                    <option value="" selected>Selecionar</option>
+                    <option value="18/04 (Sexta-Feira)">18/04 (Sexta-Feira)</option>
+                    <option value="19/04 (Sábado)">19/04 (Sábado)</option>
+                    <option value="20/04 (Domingo)">20/04 (Domingo)</option>
                 </select>
             </div>
 
@@ -262,6 +288,7 @@
             const tamanho = document.getElementById('tamanho').value;
             const sabor1 = document.getElementById('sabor1').value;
             const sabor2 = document.getElementById('sabor2').value;
+            const dataEntrega = document.getElementById('data-entrega').value;
             const precoStr = tamanho ? tamanho.split(' - ')[1] : "Não informado";
 
             // Verifica se todos os campos obrigatórios estão preenchidos
@@ -289,8 +316,13 @@
                 }
             }
 
+            // Adiciona data de entrega se foi selecionada
+            if (dataEntrega && dataEntrega !== "") {
+                mensagem += `*Data de Entrega:* ${dataEntrega}\n`;
+            }
+
             mensagem += `*Valor Total:* ${precoStr}\n` +
-                        `\nPor favor, aguarde a confirmação do seu pedido e data da entrega!`;
+                        `\nPor favor, aguarde a confirmação do seu pedido!`;
 
             const numeroWhatsApp = "5575998023056"; // Substitua pelo seu número
             const mensagemCodificada = encodeURIComponent(mensagem);
