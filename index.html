@@ -1,9 +1,9 @@
-
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pedido de Ovos de Páscoa Doce Delícia</title>
+    <title>Pedido de Ovos de Páscoa</title>
     <style>
         * {
             margin: 0;
@@ -31,9 +31,9 @@
             text-align: center;
             color: #760751f3;
             margin-bottom: 10px;
-            font-size: 30px; /* Aumentado um pouco */
-            font-weight: bold; /* Negrito */
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+            font-size: 30px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -41,9 +41,9 @@
         }
         .slogan-img {
             display: block;
-            max-width: 30%;
+            max-width: 40%;
             height: auto;
-            margin: 0 auto 20px auto; /* Centraliza e adiciona espaço abaixo */
+            margin: 0 auto 20px auto;
             border-radius: 10px;
         }
         .form-group {
@@ -84,7 +84,7 @@
         button {
             width: 100%;
             padding: 15px;
-            background: linear-gradient(135deg, #25D366, #20B858); /* Verde do WhatsApp */
+            background: linear-gradient(135deg, #25D366, #20B858);
             border: none;
             border-radius: 10px;
             color: white;
@@ -95,7 +95,7 @@
             box-shadow: 0 3px 10px rgba(37, 211, 102, 0.3);
         }
         button:hover {
-            background: linear-gradient(135deg, #20B858, #1A9C47); /* Verde mais escuro */
+            background: linear-gradient(135deg, #20B858, #1A9C47);
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(37, 211, 102, 0.5);
         }
@@ -114,10 +114,10 @@
                 padding: 15px;
             }
             h1 {
-                font-size: 24px; /* Ajustado para telas menores */
+                font-size: 24px;
             }
             .slogan-img {
-                max-width: 90%; /* Reduz um pouco em telas pequenas */
+                max-width: 90%;
             }
             select, button {
                 font-size: 14px;
@@ -130,7 +130,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>🧡 Feliz Páscoa 2025! 🐰</h1>
+        <h1>🧡 Feliz Páscoa 2025 🐰</h1>
         <img src="novo-slogan.png" alt="Slogan Doce Delícia" class="slogan-img">
         
         <form id="pedidoForm" onsubmit="enviarWhatsApp(event)">
@@ -150,9 +150,9 @@
                 <select id="tamanho" name="tamanho" onchange="atualizarTotal()"></select>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" id="sabor1-group">
                 <label for="sabor1">Sabor 1 (Obrigatório)</label>
-                <select id="sabor1" name="sabor1" required>
+                <select id="sabor1" name="sabor1">
                     <option value="" selected>Selecionar</option>
                     <option value="Brigadeiro">Brigadeiro</option>
                     <option value="Prestígio">Prestígio</option>
@@ -161,7 +161,7 @@
                 </select>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" id="sabor2-group">
                 <label for="sabor2">Sabor 2 (Opcional)</label>
                 <select id="sabor2" name="sabor2">
                     <option value="" selected>Selecionar</option>
@@ -201,6 +201,8 @@
             const tipoOvo = document.getElementById('tipo-ovo').value;
             const tamanhoSelect = document.getElementById('tamanho');
             const tamanhos = tamanhosPorTipo[tipoOvo] || [];
+            const sabor1Group = document.getElementById('sabor1-group');
+            const sabor2Group = document.getElementById('sabor2-group');
 
             // Limpa as opções atuais
             tamanhoSelect.innerHTML = '<option value="" selected>Selecionar</option>';
@@ -212,6 +214,19 @@
                 option.textContent = `${tamanho.peso} - ${tamanho.preco}`;
                 tamanhoSelect.appendChild(option);
             });
+
+            // Mostra ou esconde os campos de sabor dependendo do tipo de ovo
+            if (tipoOvo === "Ovo Tradicional") {
+                sabor1Group.style.display = 'none';
+                sabor2Group.style.display = 'none';
+                // Remove o atributo required do sabor1
+                document.getElementById('sabor1').removeAttribute('required');
+            } else {
+                sabor1Group.style.display = 'block';
+                sabor2Group.style.display = 'block';
+                // Adiciona o atributo required ao sabor1
+                document.getElementById('sabor1').setAttribute('required', '');
+            }
 
             // Preenche automaticamente se houver apenas uma opção
             if (tamanhos.length === 1) {
@@ -229,14 +244,16 @@
             let precoStr = "R$ 0,00";
 
             if (tamanho) {
-                precoStr = tamanho.split(' - ')[1] || "R$ 0,00"; // Pega o preço ou mantém 0
+                precoStr = tamanho.split(' - ')[1] || "R$ 0,00";
             }
 
             valorTotalElement.textContent = `Valor Total: ${precoStr}`;
         }
 
         // Inicializa os tamanhos e o total ao carregar a página
-        atualizarTamanhos();
+        window.onload = function() {
+            atualizarTamanhos();
+        };
 
         function enviarWhatsApp(event) {
             event.preventDefault();
@@ -248,24 +265,34 @@
             const precoStr = tamanho ? tamanho.split(' - ')[1] : "Não informado";
 
             // Verifica se todos os campos obrigatórios estão preenchidos
-            if (!tipoOvo || !tamanho || !sabor1) {
-                alert("Por favor, preencha todos os campos obrigatórios!");
+            if (!tipoOvo || !tamanho) {
+                alert("Por favor, selecione o tipo e tamanho do ovo!");
+                return;
+            }
+
+            // Verifica o sabor apenas se não for Ovo Tradicional
+            if (tipoOvo !== "Ovo Tradicional" && !sabor1) {
+                alert("Por favor, selecione pelo menos um sabor!");
                 return;
             }
 
             let mensagem = `Olá! Gostaria de fazer um pedido:\n\n` +
                            `*Tipo de Ovo:* ${tipoOvo}\n` +
-                           `*Tamanho:* ${tamanho}\n` +
-                           `*Sabor 1:* ${sabor1}\n`;
+                           `*Tamanho:* ${tamanho}\n`;
 
-            if (sabor2 && sabor2 !== "Nenhum") {
-                mensagem += `*Sabor 2:* ${sabor2}\n`;
+            // Adiciona sabores apenas se não for Ovo Tradicional
+            if (tipoOvo !== "Ovo Tradicional") {
+                mensagem += `*Sabor 1:* ${sabor1}\n`;
+
+                if (sabor2 && sabor2 !== "") {
+                    mensagem += `*Sabor 2:* ${sabor2}\n`;
+                }
             }
 
             mensagem += `*Valor Total:* ${precoStr}\n` +
                         `\nPor favor, aguarde a confirmação do seu pedido e data da entrega!`;
 
-            const numeroWhatsApp = "5575998023056"; // Substitua pelo seu número
+            const numeroWhatsApp = "5511999999999"; // Substitua pelo seu número
             const mensagemCodificada = encodeURIComponent(mensagem);
             const urlWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensagemCodificada}`;
 
