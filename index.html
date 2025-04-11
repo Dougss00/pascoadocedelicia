@@ -2,6 +2,9 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pedido de Ovos de Páscoa</title>
     <style>
@@ -147,7 +150,7 @@
 <body>
     <div class="container">
         <h1>🧡 Feliz Páscoa 2025 🐰</h1>
-        <img src="novo-slogan.png" alt="Slogan Doce Delícia" class="slogan-img">
+        <img src="novo-slogan.png?version=1" alt="Slogan Doce Delícia" class="slogan-img">
         
         <form id="pedidoForm" onsubmit="enviarWhatsApp(event)">
             <div class="form-group">
@@ -204,6 +207,9 @@
     </div>
 
     <script>
+        // Adiciona um parâmetro de versão para evitar cache do JavaScript
+        document.write('<script src="script.js?v=' + Date.now() + '"><\/script>');
+        
         // Dados dos tamanhos disponíveis por tipo de ovo
         const tamanhosPorTipo = {
             "Ovo de Colher": [
